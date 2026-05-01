@@ -1,14 +1,22 @@
 type TransactionItemProps = {
     amount: Number,
-    description: String, 
+    description: String,
     date: String
 }
-export default function TransactionItem({amount, description, date} : TransactionItemProps){
+
+export default function TransactionItem({ amount, description, date }: TransactionItemProps) {
+    const isNegative = Number(amount) < 0;
+    const formatted = `${isNegative ? '-' : '+'}$${Math.abs(Number(amount)).toFixed(2)}`;
+
     return (
-        <div>
-            <p>{amount.toString()}</p>
-            <p>{description}</p>
-            <p>{date}</p>
+        <div className="transaction-card">
+            <div className="card-meta">
+                <p className="card-description">{description.toString()}</p>
+                <p className="card-date">{date.toString()}</p>
+            </div>
+            <p className={`card-amount${isNegative ? ' negative' : ''}`}>
+                {formatted}
+            </p>
         </div>
-    )
+    );
 }

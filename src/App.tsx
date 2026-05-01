@@ -1,18 +1,18 @@
 import './App.css'
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, NavLink } from 'react-router-dom';
 import TransactionAdding from './pages/TransactionAdding';
 import TransactionHistory from './pages/TransactionHistory';
 
 function App() {
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/history">History</Link>
+    <div className="app-wrapper">
+      <nav className="app-nav">
+        <NavLink to="/" end>Home</NavLink>
+        <NavLink to="/history">History</NavLink>
       </nav>
       <Routes>
-        <Route path='/' element={<TransactionAdding/>}></Route>
-        <Route path='/history' element={<TransactionHistory/>}></Route>
+        <Route path='/' element={<TransactionAdding />} />
+        <Route path='/history' element={<TransactionHistory />} />
       </Routes>
     </div>
   )
