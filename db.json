@@ -1,0 +1,40 @@
+{
+  "transactions": [
+    {
+      "amount": 200,
+      "description": "Breakfast",
+      "date": "2026-05-06",
+      "id": 3
+    },
+    {
+      "amount": 2000,
+      "description": "New laptop",
+      "date": "2026-05-04",
+      "id": 4
+    },
+    {
+      "amount": 300,
+      "description": "Coffee",
+      "date": "2026-05-03",
+      "id": 5
+    },
+    {
+      "amount": 500,
+      "description": "summer trip",
+      "date": "2026-04-27",
+      "id": 6
+    },
+    {
+      "amount": 4000,
+      "description": "New house",
+      "date": "2026-04-30",
+      "id": 7
+    },
+    {
+      "amount": 50,
+      "description": "Food",
+      "date": "2026-04-30",
+      "id": 8
+    }
+  ]
+}

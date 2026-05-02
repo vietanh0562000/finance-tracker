@@ -4,6 +4,7 @@ import type { Transaction } from "../models/Transaction";
 type TransactionContextType = {
     transactions: Transaction[];
     setTransactions: (transactions : Transaction[]) => void;
+    addTransaction: (transaction : Transaction) => void;
 }
 
 export const TransactionContext =
@@ -16,11 +17,16 @@ type Props = {
 export default function TransactionContextProvider({children} : Props){
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
+    const addTransaction = (transaction: Transaction) => {
+        setTransactions([...transactions, transaction]);
+    }
+
     return (
         <TransactionContext.Provider
             value={{
                 transactions,
-                setTransactions
+                setTransactions,
+                addTransaction
             }}
         >
             {children}

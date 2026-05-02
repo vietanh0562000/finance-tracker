@@ -13,5 +13,10 @@ export const transactionApi = {
     create : async (newTransaction: Transaction) => {
         const res = await axios.post(`${API_URL}/transactions`, newTransaction);
         return res.data;
+    },
+
+    delete : async (id: number) => {
+        const res = await axios.delete(`${API_URL}/transactions/${id}`);
+        return res.data;
     }
 }

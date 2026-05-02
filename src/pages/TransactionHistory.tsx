@@ -16,6 +16,16 @@ export default function TransactionHistory() {
         })
     }, [])
 
+    const onDeleteTransaction = (id: number) => {
+        transactionApi.delete(id).then(data => {
+            const updatedTransactions = transactionContext?.transactions.filter(transaction => {
+                return transaction.id !== id;
+            }) ?? [];
+
+            transactionContext?.setTransactions(updatedTransactions);
+        })
+    }
+
     return (
         <div className="page-container">
             <h1 className="page-title">Transaction History</h1>
@@ -24,9 +34,11 @@ export default function TransactionHistory() {
                 {transactionContext?.transactions.map(t => (
                     <TransactionItem
                         key={t.id?.toString()}
+                        id={t.id ?? Number.NaN}
                         amount={t.amount}
                         description={t.description}
                         date={t.date}
+                        onDelete={onDeleteTransaction}
                     />
                 ))}
             </div>

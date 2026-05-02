@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { transactionApi } from '../services/api.ts'
 import type { Transaction } from '../models/Transaction';
+import { TransactionContext } from '../context/TransactionContext.tsx';
 
 export default function TransactionForm() {
     const [amount, setAmount] = useState(0);
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
+
+    const transactionContext = useContext(TransactionContext);
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAmount(Number(e.target.value));
@@ -29,7 +32,7 @@ export default function TransactionForm() {
         }
 
         transactionApi.create(newTransaction).then(data => {
-            console.log(`Add ${data} successful`);
+            transactionContext?.addTransaction(data);
         })
         .catch(e => {
             console.log(e);

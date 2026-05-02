@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { transactionApi } from '../services/api';
 import { TransactionContext } from '../context/TransactionContext';
+import type { Transaction } from '../models/Transaction';
 
 export default function TransactionSearchBar() {
     const [amount, setAmount] = useState<number>(Number.NaN);
@@ -25,11 +26,32 @@ export default function TransactionSearchBar() {
         e.preventDefault();
         //Approach 1: Get all and filter
         transactionApi.getAll().then(data => {
-            transactionContext?.setTransactions([]);
+            const transactions = data as Transaction[];
+            const filteredTransactions = transactions.filter(transaction => {
+                if (amount != null && transaction.amount < amount){
+                    return false;
+                }
+
+                if (fromDate != null && transaction.date < fromDate){
+                    return false;
+                }
+
+                if (toDate != null && transaction.date > toDate){
+                    return false;
+                }
+
+                return true;
+            })
+
+            transactionContext?.setTransactions(filteredTransactions);
         })
         //TODO: Search in context
         //TODO: Call api to Search
         console.log('Searcing')
+    }
+
+    function isSatisfiedFilter(transaction: Transaction){
+
     }
     
     return (

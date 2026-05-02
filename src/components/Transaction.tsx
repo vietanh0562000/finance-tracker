@@ -1,10 +1,12 @@
 type TransactionItemProps = {
+    id: Number,
     amount: Number,
     description: String,
-    date: String
+    date: String,
+    onDelete: Function
 }
 
-export default function TransactionItem({ amount, description, date }: TransactionItemProps) {
+export default function TransactionItem({ id, amount, description, date, onDelete }: TransactionItemProps) {
     const isNegative = Number(amount) < 0;
     const formatted = `${isNegative ? '-' : '+'}$${Math.abs(Number(amount)).toFixed(2)}`;
 
@@ -17,6 +19,7 @@ export default function TransactionItem({ amount, description, date }: Transacti
             <p className={`card-amount${isNegative ? ' negative' : ''}`}>
                 {formatted}
             </p>
+            <button onClick={() => onDelete(id)}>Delete</button>
         </div>
     );
 }
