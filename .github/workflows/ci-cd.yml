@@ -1,0 +1,25 @@
+name: Deploy to Droplet 
+on:
+    push: 
+        branches: 
+            - main
+    workflow_dispatch: 
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        environment: 
+            name: DigitalOcean
+        steps:
+            - name: SSH and Deploy
+              uses: appleboy/ssh-action@v1
+              with:
+                host: ${{ secrets.DROPLET_IP }}
+                username: ${{ secrets.DROPLET_USER }}
+                key: ${{ secrets.DROPLET_SSH_KEY }}
+                debug: true
+                script: |
+                  cd finance-tracker
+                  git pull
+                  docker compose up -d
+
+            
