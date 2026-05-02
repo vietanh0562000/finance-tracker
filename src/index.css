@@ -1,107 +1,37 @@
-:root {
-  --text: #895234;
-  --text-h: #3B2410;
-  --bg: #F8F3C4;
-  --card-bg: #FFFDF0;
-  --border: #895234;
-  --code-bg: #F0E8A8;
-  --accent: #F08834;
-  --accent-dark: #A04D13;
-  --accent-bg: rgba(240, 136, 52, 0.12);
-  --accent-border: rgba(240, 136, 52, 0.45);
-  --highlight: #FBEA88;
-  --negative: #BE5E67;
-  --shadow:
-    rgba(59, 36, 16, 0.12) 0 10px 15px -3px, rgba(59, 36, 16, 0.07) 0 4px 6px -2px;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@layer base {
+  body {
+    @apply font-body bg-amber-50 text-amber-900;
+    margin: 0;
+  }
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Hide number input spinner */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  /* Date input styling */
+  input[type='date']::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #C4A882;
-    --text-h: #F0D9B5;
-    --bg: #1E1208;
-    --card-bg: #2A1A0A;
-    --border: #5C3318;
-    --code-bg: #2E1E0A;
-    --accent: #F08834;
-    --accent-dark: #D4621A;
-    --accent-bg: rgba(240, 136, 52, 0.18);
-    --accent-border: rgba(240, 136, 52, 0.4);
-    --highlight: rgba(251, 234, 136, 0.1);
-    --negative: #D4818A;
-    --shadow:
-      rgba(0, 0, 0, 0.5) 0 10px 15px -3px, rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
+@layer utilities {
+  /* Hide scrollbar for filter row */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 700;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 36px;
-  letter-spacing: -0.5px;
-  margin: 0 0 28px;
-  @media (max-width: 768px) {
-    font-size: 28px;
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-}
-
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-
-p {
-  margin: 0;
-}
-
-code {
-  font-family: var(--mono);
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: var(--code-bg);
-  color: var(--text-h);
 }

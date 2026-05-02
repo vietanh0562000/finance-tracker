@@ -1,79 +1,138 @@
-import { useContext, useState } from 'react';
-import { transactionApi } from '../services/api.ts'
+import { useContext, useRef, useState } from 'react';
+import { Tag, DollarSign, Calendar } from 'lucide-react';
+import { transactionApi } from '../services/api.ts';
 import type { Transaction } from '../models/Transaction';
 import { TransactionContext } from '../context/TransactionContext.tsx';
 
+type TransactionType = 'expense' | 'income';
+
 export default function TransactionForm() {
-    const [amount, setAmount] = useState(0);
-    const [description, setDescription] = useState("");
-    const [date, setDate] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [type, setType] = useState<TransactionType>('expense');
 
-    const transactionContext = useContext(TransactionContext);
+  const transactionContext = useContext(TransactionContext);
 
-    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(Number(e.target.value));
-    }
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
-    const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDescription(e.target.value);
-    }
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDate(e.target.value);
-    }
+    const signedAmount = type === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+    const newTransaction: Transaction = {
+      amount: signedAmount,
+      description,
+      date,
+    };
 
-    const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    transactionApi
+      .create(newTransaction)
+      .then((data) => {
+        transactionContext?.addTransaction(data);
+        setAmount(0);
+        setDescription('');
+        setDate('');
+      })
+      .catch(console.error);
+  };
 
-        const newTransaction: Transaction = {
-            amount: amount,
-            description: description,
-            date: date
-        }
+  const inputClass =
+    'flex-1 h-13 px-5 bg-white border-[1.5px] border-amber-900 rounded-full font-body text-amber-900 placeholder:text-caramel-500/60 placeholder:italic focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 outline-none transition-all duration-200 text-base';
 
-        transactionApi.create(newTransaction).then(data => {
-            transactionContext?.addTransaction(data);
-        })
-        .catch(e => {
-            console.log(e);
-        });
-    }
+  const iconBtnClass =
+    'w-12 h-12 bg-amber-400 rounded-xl flex items-center justify-center text-amber-900 hover:bg-amber-600 transition-colors flex-shrink-0';
 
-    return (
-        <form className="transaction-form" onSubmit={handleSubmit}>
-            <div className="form-field">
-                <label htmlFor="amount">Amount</label>
-                <input
-                    id="amount"
-                    name="amount"
-                    type="number"
-                    step="0.01"
-                    value={amount}
-                    onChange={handleAmountChange}
-                    placeholder="0.00"
-                />
-            </div>
-            <div className="form-field">
-                <label htmlFor="description">Description</label>
-                <input
-                    id="description"
-                    name="description"
-                    value={description}
-                    onChange={handleDescriptionChange}
-                    placeholder="e.g. Groceries"
-                />
-            </div>
-            <div className="form-field">
-                <label htmlFor="date">Date</label>
-                <input
-                    id="date"
-                    name="date"
-                    type="date"
-                    value={date}
-                    onChange={handleDateChange}
-                />
-            </div>
-            <button type="submit" className="submit-btn">Add Transaction</button>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit} className="px-5 pt-4 space-y-5">
+      {/* Type toggle */}
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={() => setType('expense')}
+          className={`px-6 py-2.5 rounded-full font-heading font-bold text-sm transition-colors ${
+            type === 'expense'
+              ? 'bg-amber-400 text-amber-900'
+              : 'bg-gray-100 text-gray-400'
+          }`}
+        >
+          Expense
+        </button>
+        <button
+          type="button"
+          onClick={() => setType('income')}
+          className={`px-6 py-2.5 rounded-full font-heading font-bold text-sm transition-colors ${
+            type === 'income'
+              ? 'bg-amber-400 text-amber-900'
+              : 'bg-gray-100 text-gray-400'
+          }`}
+        >
+          Income
+        </button>
+      </div>
+
+      <div className="border-t-2 border-amber-900" />
+
+      {/* Description */}
+      <div className="flex items-center gap-3">
+        <input
+          className={inputClass}
+          style={{ height: '52px' }}
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Expense's name"
+          required
+        />
+        <button type="button" className={iconBtnClass}>
+          <Tag size={20} />
+        </button>
+      </div>
+
+      {/* Amount */}
+      <div className="flex items-center gap-3">
+        <input
+          className={inputClass}
+          style={{ height: '52px' }}
+          type="number"
+          step="0.01"
+          min="0"
+          value={amount || ''}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          placeholder="Amount"
+          required
+        />
+        <button type="button" className={iconBtnClass}>
+          <DollarSign size={20} />
+        </button>
+      </div>
+
+      {/* Date */}
+      <div className="flex items-center gap-3">
+        <input
+          ref={dateInputRef}
+          className={inputClass}
+          style={{ height: '52px' }}
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
+        <button type="button" className={iconBtnClass} onClick={() => {
+            dateInputRef?.current?.showPicker();
+        }}>
+          <Calendar size={20} />
+        </button>
+      </div>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        className="w-full bg-amber-400 hover:bg-amber-600 active:bg-caramel-500 active:scale-[0.98] rounded-full font-heading font-bold text-lg text-amber-900 shadow-md transition-all duration-200"
+        style={{ height: '56px' }}
+      >
+        Add Transaction
+      </button>
+    </form>
+  );
 }

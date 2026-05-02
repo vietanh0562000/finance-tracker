@@ -1,47 +1,55 @@
-import { useContext, useEffect} from 'react'
+import { useContext, useEffect } from 'react';
 import { transactionApi } from '../services/api';
 import TransactionItem from '../components/Transaction';
 import TransactionSearchBar from '../components/TransactionSearchBar';
+import PageTitle from '../components/PageTitle';
 import { TransactionContext } from '../context/TransactionContext';
 
 export default function TransactionHistory() {
-    const transactionContext = useContext(TransactionContext);
+  const transactionContext = useContext(TransactionContext);
 
-    useEffect(() => {
-        transactionApi.getAll().then(data => {
-            transactionContext?.setTransactions(data);
-        })
-        .catch(e => {
-            console.error(e);
-        })
-    }, [])
+  useEffect(() => {
+    transactionApi
+      .getAll()
+      .then((data) => transactionContext?.setTransactions(data))
+      .catch(console.error);
+  }, []);
 
-    const onDeleteTransaction = (id: number) => {
-        transactionApi.delete(id).then(data => {
-            const updatedTransactions = transactionContext?.transactions.filter(transaction => {
-                return transaction.id !== id;
-            }) ?? [];
+  const onDeleteTransaction = (id: number) => {
+    transactionApi.delete(id).then(() => {
+      const updated =
+        transactionContext?.transactions.filter((t) => t.id !== id) ?? [];
+      transactionContext?.setTransactions(updated);
+    });
+  };
 
-            transactionContext?.setTransactions(updatedTransactions);
-        })
-    }
+  return (
+    <div>
+      <PageTitle before="TRANSACTION" highlight="HISTORY" />
+      <TransactionSearchBar />
 
-    return (
-        <div className="page-container">
-            <h1 className="page-title">Transaction History</h1>
-            <TransactionSearchBar />
-            <div className="transaction-list">
-                {transactionContext?.transactions.map(t => (
-                    <TransactionItem
-                        key={t.id?.toString()}
-                        id={t.id ?? Number.NaN}
-                        amount={t.amount}
-                        description={t.description}
-                        date={t.date}
-                        onDelete={onDeleteTransaction}
-                    />
-                ))}
-            </div>
+      {transactionContext?.transactions.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-4 py-20 px-5">
+          <span className="text-5xl">📭</span>
+          <p className="font-heading font-bold text-xl text-amber-900">No transactions yet</p>
+          <p className="font-body text-sm text-caramel-500 text-center">
+            Start tracking your finances by adding a transaction
+          </p>
         </div>
-    );
+      ) : (
+        <div className="bg-white rounded-2xl mx-4 border border-caramel-500/15 shadow-card overflow-hidden">
+          {transactionContext?.transactions.map((t) => (
+            <TransactionItem
+              key={t.id?.toString()}
+              id={t.id ?? Number.NaN}
+              amount={t.amount}
+              description={t.description}
+              date={t.date}
+              onDelete={onDeleteTransaction}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }

@@ -1,10 +1,11 @@
-import TransactionForm from "../components/TransactionForm";
+import TransactionForm from '../components/TransactionForm';
+import PageTitle from '../components/PageTitle';
 
 export default function TransactionAdding() {
-    return (
-        <div className="page-container">
-            <h1 className="page-title">Add Transaction</h1>
-            <TransactionForm />
-        </div>
-    );
+  return (
+    <div>
+      <PageTitle before="CREATE" highlight="NEW" />
+      <TransactionForm />
+    </div>
+  );
 }
