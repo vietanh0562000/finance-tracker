@@ -1,8 +1,9 @@
-import { useContext, useRef, useState } from 'react';
-import { Tag, DollarSign, Calendar } from 'lucide-react';
+import { useContext, useState } from 'react';
+import { Tag, DollarSign } from 'lucide-react';
 import { transactionApi } from '../services/api.ts';
 import type { Transaction } from '../models/Transaction';
 import { TransactionContext } from '../context/TransactionContext.tsx';
+import DatePickerInput from './DatePickerInput';
 
 type TransactionType = 'expense' | 'income';
 
@@ -13,8 +14,6 @@ export default function TransactionForm() {
   const [type, setType] = useState<TransactionType>('expense');
 
   const transactionContext = useContext(TransactionContext);
-
-  const dateInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,22 +107,12 @@ export default function TransactionForm() {
       </div>
 
       {/* Date */}
-      <div className="flex items-center gap-3">
-        <input
-          ref={dateInputRef}
-          className={inputClass}
-          style={{ height: '52px' }}
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
-        <button type="button" className={iconBtnClass} onClick={() => {
-            dateInputRef?.current?.showPicker();
-        }}>
-          <Calendar size={20} />
-        </button>
-      </div>
+      <DatePickerInput
+        value={date}
+        onChange={setDate}
+        placeholder="Fill in the date"
+        required
+      />
 
       {/* Submit */}
       <button

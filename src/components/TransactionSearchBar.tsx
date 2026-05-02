@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { Search } from 'lucide-react';
+import DatePickerInput from './DatePickerInput';
 import { transactionApi } from '../services/api';
 import { TransactionContext } from '../context/TransactionContext';
 import type { Transaction } from '../models/Transaction';
@@ -32,9 +33,6 @@ export default function TransactionSearchBar() {
   const activePill = `${pillBase} bg-amber-400 text-amber-900`;
   const inactivePill = `${pillBase} bg-gray-100 text-gray-400 hover:bg-amber-100`;
 
-  const inputClass =
-    'flex-1 px-5 bg-white border-[1.5px] border-amber-900 rounded-full font-body text-amber-900 placeholder:text-caramel-500/60 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 outline-none transition-all text-sm';
-
   return (
     <form onSubmit={handleSubmit} className="px-5 pt-2 pb-4 space-y-3">
       {/* Type filter pills */}
@@ -52,22 +50,18 @@ export default function TransactionSearchBar() {
       </div>
 
       {/* Date range */}
-      <div className="flex gap-2">
-        <input
-          className={inputClass}
-          style={{ height: '44px' }}
-          type="date"
+      <div className="flex gap-2 items-center">
+        <DatePickerInput
           value={fromDate}
-          onChange={(e) => setFromDate(e.target.value)}
+          onChange={setFromDate}
           placeholder="From"
+          variant="compact"
         />
-        <input
-          className={inputClass}
-          style={{ height: '44px' }}
-          type="date"
+        <DatePickerInput
           value={toDate}
-          onChange={(e) => setToDate(e.target.value)}
+          onChange={setToDate}
           placeholder="To"
+          variant="compact"
         />
         <button
           type="submit"
