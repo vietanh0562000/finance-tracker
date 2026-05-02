@@ -1,0 +1,11 @@
+services:
+  finance-tracker:
+    build:
+      context: .
+    ports:
+      - 80:80
+  server:
+    build:
+      context: ./server
+    expose:
+      - "3001"

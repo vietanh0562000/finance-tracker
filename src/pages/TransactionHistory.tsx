@@ -45,6 +45,7 @@ export default function TransactionHistory() {
               amount={t.amount}
               description={t.description}
               date={t.date}
+              category={t.category}
               onDelete={onDeleteTransaction}
             />
           ))}

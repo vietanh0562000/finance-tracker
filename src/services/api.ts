@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { Transaction } from '../models/Transaction';
 
-const API_URL = 'http://localhost:3001'
+const API_URL = 'http://localhost/api'
 
 export const transactionApi = {
     getAll : async () => {
