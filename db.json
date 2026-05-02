@@ -35,6 +35,31 @@
       "description": "Beef",
       "date": "2026-05-05",
       "id": 9
+    },
+    {
+      "amount": -60,
+      "description": "Yoink",
+      "date": "2026-05-02",
+      "id": 10
+    },
+    {
+      "amount": -1,
+      "description": "Flower",
+      "date": "2026-05-01",
+      "id": 11
+    },
+    {
+      "amount": -20,
+      "description": "Bottle",
+      "date": "2026-05-01",
+      "id": 12
+    },
+    {
+      "amount": -20,
+      "description": "Coffee",
+      "date": "2026-05-02",
+      "category": "DRINK",
+      "id": 13
     }
   ]
 }

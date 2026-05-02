@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import { Tag, DollarSign } from 'lucide-react';
 import { transactionApi } from '../services/api.ts';
 import type { Transaction } from '../models/Transaction';
 import { TransactionContext } from '../context/TransactionContext.tsx';
 import DatePickerInput from './DatePickerInput';
+import CategoryInput from './CategoryInput.tsx';
 
 type TransactionType = 'expense' | 'income';
 
@@ -11,6 +11,7 @@ export default function TransactionForm() {
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
+  const [category, setCategory] = useState('');
   const [type, setType] = useState<TransactionType>('expense');
 
   const transactionContext = useContext(TransactionContext);
@@ -23,6 +24,7 @@ export default function TransactionForm() {
       amount: signedAmount,
       description,
       date,
+      category
     };
 
     transactionApi
@@ -38,9 +40,6 @@ export default function TransactionForm() {
 
   const inputClass =
     'flex-1 h-13 px-5 bg-white border-[1.5px] border-amber-900 rounded-full font-body text-amber-900 placeholder:text-caramel-500/60 placeholder:italic focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 outline-none transition-all duration-200 text-base';
-
-  const iconBtnClass =
-    'w-12 h-12 bg-amber-400 rounded-xl flex items-center justify-center text-amber-900 hover:bg-amber-600 transition-colors flex-shrink-0';
 
   return (
     <form onSubmit={handleSubmit} className="px-5 pt-4 space-y-5">
@@ -83,10 +82,11 @@ export default function TransactionForm() {
           placeholder="Expense's name"
           required
         />
-        <button type="button" className={iconBtnClass}>
-          <Tag size={20} />
-        </button>
       </div>
+
+      {/* Category */}
+
+      <CategoryInput value={category} onChange={setCategory}/>
 
       {/* Amount */}
       <div className="flex items-center gap-3">
@@ -101,9 +101,6 @@ export default function TransactionForm() {
           placeholder="Amount"
           required
         />
-        <button type="button" className={iconBtnClass}>
-          <DollarSign size={20} />
-        </button>
       </div>
 
       {/* Date */}

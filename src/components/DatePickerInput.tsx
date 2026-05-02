@@ -224,13 +224,6 @@ export default function DatePickerInput({
         {displayText}
       </div>
       {hiddenInput}
-      <button
-        type="button"
-        onClick={toggle}
-        className={`w-12 h-12 rounded-xl flex items-center justify-center text-amber-900 transition-colors flex-shrink-0 ${open ? 'bg-caramel-500' : 'bg-amber-400 hover:bg-amber-600'}`}
-      >
-        <Calendar size={20} />
-      </button>
       {popup}
     </div>
   );
